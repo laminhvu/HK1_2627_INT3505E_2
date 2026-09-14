@@ -1,31 +1,23 @@
-from flask import Flask ,jsonify , request
+from flask import Flask, jsonify
 app = Flask(__name__)
-@app.route("/")
-def index():
-    return {"message": "Hello, APIIIII"}
-BOOKS = []
-def find_by_id(book_id):
-    for book in BOOKS:
-        if book["id"] == book_id:
-            return book
-    return None
-@app.route("/books/<book_id>", methods = ["GET"])
-def get_book(book_id):
-    book = find_by_id(book_id)
-    if book is None:
-        return jsonify({"error" : "not found"}) , 404
-    return jsonify(book), 200
+ORDERS = {
+    "1": {"status": "pending"},
+    "2": {"status": "shipped"},
+    "3": {"status": "delivered"},
+    "4": {"status": "processing"}
+}
+@app.route("/orders/<order_id>" , methods= ["DELETE"])
+def delete_order(order_id):
+    order = ORDERS.get(order_id)
 
-@app.route("/items/<int:item_id>")
-def get_item(item_id):
-    return jsonify({"id": item_id}), 200
-
-@app.route("/books", methods = ["GET"])
-def list_book():
-    limit = int(request.args.get("limit", 20))
-    q = request.args.get("q","").strip().lower()
-    item = [b for b in BOOKS if q in b["t"].lower()]
-    return jsonify({"items" : item}), 200
-
+    if order is None:
+        return {"error" : "not found"}, 404
+    if order["status"] in ("shipped", "delivered"):
+        return {"error" : "cannot delete"}, 409
+    ORDERS.pop(order_id, None)
+    return "", 204
+@app.route("/orders", methods=["GET"])
+def get_orders():
+    return ORDERS
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port = 5000 , debug = True)
