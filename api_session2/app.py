@@ -63,7 +63,7 @@ def patch(bid):
     for k in "title author isbn price".split():
         if k in p:
             BOOKS[i][k] = p[k]
-        return jsonify(BOOKS[i]), 200
+    return jsonify(BOOKS[i]), 200
 
 #DELETE
 @app.delete("/books/<int:bid>")
