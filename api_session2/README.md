@@ -6,3 +6,7 @@
 ![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/2e4979630e23fc35d653bed36576ae6fc22102ab/api_session2/Images/Screenshot%202026-09-18%20020344.png)
 ![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/beabe57123a494fe8459d26b5f53ab89477d46b5/api_session2/Images/Screenshot%202026-09-18%20020425.png)
 
+# BAI 3
+![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/4c9a6d3a952a603f0c16bb22f44a6be0bba94193/api_session2/Images/Screenshot%202026-09-21%20192559.png)
+![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/4c9a6d3a952a603f0c16bb22f44a6be0bba94193/api_session2/Images/Screenshot%202026-09-21%20192740.png)
+![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/4c9a6d3a952a603f0c16bb22f44a6be0bba94193/api_session2/Images/Screenshot%202026-09-21%20192835.png)
