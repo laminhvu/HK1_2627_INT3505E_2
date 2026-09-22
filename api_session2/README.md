@@ -10,3 +10,6 @@
 ![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/4c9a6d3a952a603f0c16bb22f44a6be0bba94193/api_session2/Images/Screenshot%202026-09-21%20192559.png)
 ![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/4c9a6d3a952a603f0c16bb22f44a6be0bba94193/api_session2/Images/Screenshot%202026-09-21%20192740.png)
 ![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/4c9a6d3a952a603f0c16bb22f44a6be0bba94193/api_session2/Images/Screenshot%202026-09-21%20192835.png)
+# DATABASE
+![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/086cb721c24f0919834119919b7863b0951fd227/api_session2/Images/Screenshot%202026-09-22%20173918.png)
+![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/086cb721c24f0919834119919b7863b0951fd227/api_session2/Images/Screenshot%202026-09-22%20174234.png)
