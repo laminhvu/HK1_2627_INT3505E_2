@@ -13,3 +13,5 @@
 # DATABASE
 ![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/086cb721c24f0919834119919b7863b0951fd227/api_session2/Images/Screenshot%202026-09-22%20173918.png)
 ![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/086cb721c24f0919834119919b7863b0951fd227/api_session2/Images/Screenshot%202026-09-22%20174234.png)
+# THEM ETAG
+![image alt](https://github.com/laminhvu/HK1_2627_INT3505E_2/blob/fa5040371da243fa91e82de87fa71ad6ec201e3c/api_session2/Images/Screenshot%202026-09-22%20175210.png)
