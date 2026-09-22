@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request, make_response
 import sqlite3 
 app = Flask(__name__)
-DB = "books.db"
+DB = "api_session2/books.db"
 def get_db():
     conn = sqlite3.connect(DB)
     conn.row_factory = sqlite3.Row
