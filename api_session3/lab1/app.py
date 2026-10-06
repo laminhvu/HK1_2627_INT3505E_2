@@ -32,6 +32,7 @@ def create_post():
     POSTS[_next_id] = post
     _next_id += 1
 
+
     resp = jsonify(post)
     resp.status_code = 201                             
     resp.headers["Location"] = f"/v1/posts/{post['id']}"  
