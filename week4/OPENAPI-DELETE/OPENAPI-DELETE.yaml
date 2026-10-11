@@ -1,0 +1,122 @@
+
+openapi: 3.0.3
+
+info:
+  title: Tasks API - DELETE Operations
+  version: 1.0.0
+  description: Đặc tả API xóa task theo ID.
+
+servers:
+  - url: http://localhost:5001/v1
+    description: Flask local development server
+
+tags:
+  - name: tasks
+    description: Quản lý công việc
+
+security:
+  - bearerAuth: []
+
+paths:
+  /tasks/{taskId}:
+    delete:
+      tags: [tasks]
+      summary: Xóa task theo ID
+      description: >
+        Xóa task tương ứng với taskId.
+        Nếu task không tồn tại, trả về lỗi 404.
+      operationId: deleteTask
+      parameters:
+        - $ref: '#/components/parameters/TaskId'
+      responses:
+        '204':
+          description: Xóa task thành công, không trả về nội dung.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        default:
+          $ref: '#/components/responses/ServerError'
+
+components:
+  parameters:
+    TaskId:
+      name: taskId
+      in: path
+      required: true
+      description: UUID của task cần xóa.
+      schema:
+        type: string
+        format: uuid
+      example: '11111111-1111-4111-8111-111111111111'
+
+  schemas:
+    Error:
+      type: object
+      required: [status, title]
+      properties:
+        type:
+          type: string
+          format: uri
+          example: https://example.vn/errors/task-not-found
+        title:
+          type: string
+          example: Task not found
+        status:
+          type: integer
+          example: 404
+        detail:
+          type: string
+          example: Task không tồn tại.
+        instance:
+          type: string
+          example: /v1/tasks/11111111-1111-4111-8111-111111111111
+
+  responses:
+    Unauthorized:
+      description: Thiếu hoặc sai Bearer token
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            title: Unauthorized
+            status: 401
+            detail: Dùng Authorization header với Bearer demo-token.
+
+    NotFound:
+      description: Không tìm thấy task theo ID
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            title: Task not found
+            status: 404
+            detail: Task không tồn tại.
+
+    ValidationError:
+      description: ID task không hợp lệ
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            title: Validation error
+            status: 422
+            detail: taskId phải là UUID hợp lệ.
+
+    ServerError:
+      description: Lỗi máy chủ không mong đợi
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
