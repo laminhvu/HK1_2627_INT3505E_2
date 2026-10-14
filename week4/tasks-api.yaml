@@ -1,0 +1,365 @@
+
+openapi: 3.0.3
+
+info:
+  title: Tasks API
+  version: 1.0.0
+  description: Quan ly task noi bo
+
+servers:
+  - url: http://localhost:5000/v1
+
+security:
+  - bearerAuth: []
+
+tags:
+  - name: tasks
+    description: Quan ly cong viec
+
+paths:
+  /tasks:
+    get:
+      tags:
+        - tasks
+      summary: Lay danh sach task
+      operationId: listTasks
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/PageLimit'
+        - $ref: '#/components/parameters/StatusFilter'
+      responses:
+        '200':
+          $ref: '#/components/responses/TaskPage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - tasks
+      summary: Tao task moi
+      operationId: createTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTaskInput'
+      responses:
+        '201':
+          description: Tao task thanh cong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+  /tasks/{id}:
+    parameters:
+      - $ref: '#/components/parameters/TaskId'
+
+    get:
+      tags:
+        - tasks
+      summary: Lay chi tiet task
+      operationId: getTaskById
+      responses:
+        '200':
+          description: Tim thay task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    patch:
+      tags:
+        - tasks
+      summary: Cap nhat mot phan task
+      operationId: updateTask
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTaskInput'
+      responses:
+        '200':
+          description: Cap nhat task thanh cong
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+
+    delete:
+      tags:
+        - tasks
+      summary: Xoa task
+      operationId: deleteTask
+      responses:
+        '204':
+          description: Xoa task thanh cong
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    TaskId:
+      name: id
+      in: path
+      required: true
+      description: ID cua task
+      schema:
+        type: integer
+        minimum: 1
+
+    Page:
+      name: page
+      in: query
+      required: false
+      description: So trang bat dau tu 1
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+
+    PageLimit:
+      name: limit
+      in: query
+      required: false
+      description: So task toi da tren mot trang
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+
+    StatusFilter:
+      name: status
+      in: query
+      required: false
+      description: Loc task theo trang thai
+      schema:
+        $ref: '#/components/schemas/TaskStatus'
+
+  schemas:
+    Task:
+      type: object
+      required:
+        - id
+        - title
+        - status
+        - priority
+        - createdAt
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          maxLength: 200
+          example: Hoan thanh bao cao
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        priority:
+          $ref: '#/components/schemas/TaskPriority'
+        dueDate:
+          type: string
+          format: date
+          nullable: true
+          example: '2026-10-20'
+        assigneeId:
+          type: integer
+          nullable: true
+          example: 5
+        createdAt:
+          type: string
+          format: date-time
+          example: '2026-10-14T08:00:00Z'
+
+    CreateTaskInput:
+      type: object
+      required:
+        - title
+        - status
+        - priority
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+          example: Hoan thanh bao cao
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        priority:
+          $ref: '#/components/schemas/TaskPriority'
+        dueDate:
+          type: string
+          format: date
+          nullable: true
+          example: '2026-10-20'
+        assigneeId:
+          type: integer
+          minimum: 1
+          nullable: true
+          example: 5
+
+    UpdateTaskInput:
+      type: object
+      minProperties: 1
+      properties:
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        priority:
+          $ref: '#/components/schemas/TaskPriority'
+        dueDate:
+          type: string
+          format: date
+          nullable: true
+        assigneeId:
+          type: integer
+          minimum: 1
+          nullable: true
+
+    TaskStatus:
+      type: string
+      enum:
+        - TODO
+        - IN_PROGRESS
+        - DONE
+      example: TODO
+
+    TaskPriority:
+      type: string
+      enum:
+        - LOW
+        - MEDIUM
+        - HIGH
+      example: MEDIUM
+
+    TaskPage:
+      type: object
+      required:
+        - items
+        - page
+        - limit
+        - total
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        total:
+          type: integer
+          example: 25
+        totalPages:
+          type: integer
+          example: 3
+
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          example: NOT_FOUND
+        message:
+          type: string
+          example: Khong tim thay task
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+  responses:
+    TaskPage:
+      description: Danh sach task va thong tin phan trang
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TaskPage'
+
+    Unauthorized:
+      description: Thieu token hoac token khong hop le
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: UNAUTHORIZED
+            message: Token khong hop le
+
+    BadRequest:
+      description: Request khong hop le
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: BAD_REQUEST
+            message: Tham so khong hop le
+
+    NotFound:
+      description: Khong tim thay task
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: NOT_FOUND
+            message: Khong tim thay task
+
+    ValidationError:
+      description: Du lieu dau vao khong hop le
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: VALIDATION_ERROR
+            message: Du lieu khong hop le
+            details:
+              - field: title
+                message: Title khong duoc de trong
