@@ -1,0 +1,273 @@
+openapi: 3.0.3
+
+info:
+  title: Music Social API
+  description: API cho nền tảng chia sẻ âm nhạc
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Backend
+
+tags:
+  - name: Authentication
+    description: Xác thực người dùng
+
+  - name: Posts
+    description: Đăng bài và truy xuất bài đăng
+
+paths:
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Đăng nhập vào nền tảng
+      operationId: login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Đăng nhập thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Dữ liệu yêu cầu không hợp lệ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Email hoặc mật khẩu không chính xác
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '423':
+          description: Tài khoản bị khóa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Quá nhiều lần thử đăng nhập
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Làm mới access token và refresh token
+      operationId: refreshTokens
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequest'
+      responses:
+        '200':
+          description: Làm mới token thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          description: Dữ liệu yêu cầu không hợp lệ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Refresh token không hợp lệ hoặc đã hết hạn
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Phát hiện refresh token bị sử dụng lại
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Quá nhiều yêu cầu làm mới token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /posts/{id}:
+    get:
+      tags:
+        - Posts
+      summary: Lấy bài đăng theo ID
+      operationId: getPostById
+      security:
+        - oauth2:
+            - posts:read
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID duy nhất của bài đăng
+          schema:
+            type: string
+            format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+      responses:
+        '200':
+          description: Lấy bài đăng thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '400':
+          description: ID bài đăng không đúng định dạng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Thiếu token, token không hợp lệ hoặc đã hết hạn
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Không đủ quyền đọc bài đăng
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Bài đăng không tồn tại hoặc người dùng không được phép xem
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Quá nhiều yêu cầu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /api/v1/auth/login
+          scopes:
+            posts:read: Đọc bài đăng âm nhạc
+
+  schemas:
+    LoginRequest:
+      type: object
+      required:
+        - email
+        - password
+      properties:
+        email:
+          type: string
+          format: email
+          example: lmv@example.com
+        password:
+          type: string
+          format: password
+          example: '12345678'
+
+    RefreshTokenRequest:
+      type: object
+      required:
+        - refresh_token
+      properties:
+        refresh_token:
+          type: string
+          description: Refresh token được cấp khi xác thực
+
+    TokenResponse:
+      type: object
+      required:
+        - access_token
+        - refresh_token
+        - token_type
+        - expires_in
+      properties:
+        access_token:
+          type: string
+          description: Token dùng để truy cập tài nguyên được bảo vệ
+        refresh_token:
+          type: string
+          description: Token dùng để yêu cầu cấp cặp token mới
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+          description: Thời gian sống của access token tính bằng giây
+          example: 900
+
+    Post:
+      type: object
+      required:
+        - id
+        - user_id
+        - content
+        - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        user_id:
+          type: string
+          description: ID của người tạo bài đăng
+          example: user-123
+        content:
+          type: string
+          description: Nội dung bài đăng
+          example: Listening to my favorite song today!
+        music_url:
+          type: string
+          format: uri
+          description: Đường dẫn đến nội dung âm nhạc được chia sẻ
+          example: https://example.com/music/track-123
+        visibility:
+          type: string
+          enum:
+            - public
+            - followers
+            - private
+          example: public
+        created_at:
+          type: string
+          format: date-time
+          example: '2026-10-26T10:30:00Z'
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          description: Mã lỗi dành cho chương trình xử lý
+          example: INVALID_REQUEST
+        message:
+          type: string
+          description: Thông báo lỗi dành cho người đọc
+          example: The request data is invalid
