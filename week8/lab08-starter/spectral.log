@@ -1,0 +1,17 @@
+
+c:/HK1_2627_INT3505E_2/week8/lab08-starter/openapi.yaml
+  2:6   warning  info-contact           Info object must have "contact" object.                        info
+  12:9  warning  operation-description  Operation "description" must be present and non-empty string.  paths./health.get
+  12:9  warning  operation-tags         Operation must have non-empty "tags" array.                    paths./health.get
+  24:9  warning  operation-description  Operation "description" must be present and non-empty string.  paths./books.get
+  24:9  warning  operation-tags         Operation must have non-empty "tags" array.                    paths./books.get
+ 45:10  warning  operation-description  Operation "description" must be present and non-empty string.  paths./books.post
+ 45:10  warning  operation-tags         Operation must have non-empty "tags" array.                    paths./books.post
+  66:9  warning  operation-description  Operation "description" must be present and non-empty string.  paths./books/{id}.get
+  66:9  warning  operation-tags         Operation must have non-empty "tags" array.                    paths./books/{id}.get
+  75:9  warning  operation-description  Operation "description" must be present and non-empty string.  paths./books/{id}.put
+  75:9  warning  operation-tags         Operation must have non-empty "tags" array.                    paths./books/{id}.put
+ 90:12  warning  operation-description  Operation "description" must be present and non-empty string.  paths./books/{id}.delete
+ 90:12  warning  operation-tags         Operation must have non-empty "tags" array.                    paths./books/{id}.delete
+
+✖ 13 problems (0 errors, 13 warnings, 0 infos, 0 hints)

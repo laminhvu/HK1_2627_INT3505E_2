@@ -1,0 +1,50 @@
+
+extends: ["spectral:oas"]
+
+rules:
+  
+  operation-operationId: error
+  no-body-on-204:
+    description: "Response 204 không được có 'content' (204 nghĩa là không có body)."
+    severity: error
+    given: "$.paths[*][*].responses['204']"
+    then:
+      field: content
+      function: falsy
+  book-year-must-be-integer:
+    description: "Book.year phải có type: integer."
+    severity: error
+    given: "$.components.schemas.Book.properties.year"
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values: [integer]
+  response-200-must-have-properties:
+    description: "Schema của response 200 phải khai báo ít nhất 1 trường (properties không được rỗng/thiếu). Nếu response là mảng thì kiểm tra schema của items."
+    severity: error
+    given: "$.paths[*][*].responses['200'].content.*.schema"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          if:
+            required: [type]
+            properties:
+              type:
+                const: array
+          then:
+            required: [items]
+            properties:
+              items:
+                required: [properties]
+                properties:
+                  properties:
+                    type: object
+                    minProperties: 1
+          else:
+            required: [properties]
+            properties:
+              properties:
+                type: object
+                minProperties: 1
