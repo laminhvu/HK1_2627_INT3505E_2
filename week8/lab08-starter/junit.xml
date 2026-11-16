@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Books API — Lab08 Starter" tests="7" time="0.113">
+  <testsuite name="books / error_cases / POST /books" id="fd9339d2-b0da-4542-ac50-9863cb7173e6" timestamp="2026-11-16T09:36:08.642Z" tests="2" failures="0" errors="0" time="0.033">
+    <testcase name="400 Bad Request" time="0.033" classname="BooksErrorCasesPostBooks"/>
+    <testcase name="error body has code/message" time="0.033" classname="BooksErrorCasesPostBooks"/>
+  </testsuite>
+  <testsuite name="books / error_cases / GET /books/9999" id="1e24ac23-4caf-476b-9dd6-04afb48d0d59" timestamp="2026-11-16T09:36:08.642Z" tests="2" failures="0" errors="0" time="0.007">
+    <testcase name="404 Not Found" time="0.007" classname="BooksErrorCasesGetBooks9999"/>
+    <testcase name="error body has code/message" time="0.007" classname="BooksErrorCasesGetBooks9999"/>
+  </testsuite>
+  <testsuite name="books / GET /books — initial list" id="952bcd85-c339-4482-82f3-9125d92f964b" timestamp="2026-11-16T09:36:08.642Z" tests="2" failures="0" errors="0" time="0.008">
+    <testcase name="200 OK" time="0.008" classname="BooksGetBooksInitialList"/>
+    <testcase name="body is array" time="0.008" classname="BooksGetBooksInitialList"/>
+  </testsuite>
+  <testsuite name="books / POST /books — create" id="2374d9f3-323b-439d-8c88-3c322cad80d9" timestamp="2026-11-16T09:36:08.642Z" tests="2" failures="0" errors="0" time="0.020">
+    <testcase name="201 Created" time="0.020" classname="BooksPostBooksCreate"/>
+    <testcase name="positive id" time="0.020" classname="BooksPostBooksCreate"/>
+  </testsuite>
+  <testsuite name="books / GET /books/{id} — read" id="8704d6df-cd4f-4cab-b03f-82628767d1ff" timestamp="2026-11-16T09:36:08.642Z" tests="2" failures="0" errors="0" time="0.007">
+    <testcase name="200 OK" time="0.007" classname="BooksGetBooksIdRead"/>
+    <testcase name="expected fields" time="0.007" classname="BooksGetBooksIdRead"/>
+  </testsuite>
+  <testsuite name="books / PUT /books/{id} — replace" id="e2f118e7-d2fc-4626-a2cf-c52dd039e311" timestamp="2026-11-16T09:36:08.642Z" tests="2" failures="0" errors="0" time="0.020">
+    <testcase name="200 OK" time="0.020" classname="BooksPutBooksIdReplace"/>
+    <testcase name="updated title" time="0.020" classname="BooksPutBooksIdReplace"/>
+  </testsuite>
+  <testsuite name="books / DELETE /books/{id} — delete" id="9e96bdcf-d5dd-4331-9bd2-62c3dde28249" timestamp="2026-11-16T09:36:08.642Z" tests="2" failures="0" errors="0" time="0.018">
+    <testcase name="204 No Content" time="0.018" classname="BooksDeleteBooksIdDelete"/>
+    <testcase name="empty body" time="0.018" classname="BooksDeleteBooksIdDelete"/>
+  </testsuite>
+</testsuites>
