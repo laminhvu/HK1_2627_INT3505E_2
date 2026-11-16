@@ -16,6 +16,17 @@
           "item": [
             {
               "name": "POST /books",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"400 Bad Request\", () => pm.response.to.have.status(400));\r\npm.test(\"error body has code/message\", () => pm.expect(pm.response.json()).to.have.any.keys(\"code\", \"message\", \"error\"));"
+                    ]
+                  }
+                }
+              ],
               "request": {
                 "method": "POST",
                 "header": [],
@@ -27,6 +38,17 @@
             },
             {
               "name": "GET /books/9999",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "type": "text/javascript",
+                    "exec": [
+                      "pm.test(\"404 Not Found\", () => pm.response.to.have.status(404));\r\npm.test(\"error body has code/message\", () => pm.expect(pm.response.json()).to.have.any.keys(\"code\", \"message\", \"error\"));"
+                    ]
+                  }
+                }
+              ],
               "request": {
                 "method": "GET",
                 "header": [],
@@ -46,7 +68,7 @@
               "script": {
                 "type": "text/javascript",
                 "exec": [
-                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));\npm.test(\"body is array\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));\n\npm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Response body is a list/object\", function () {\n    const jsonData = pm.response.json();\n    pm.expect(jsonData).to.be.an(\"array\"); \n});"
+                  "pm.test(\"200 OK\", () => pm.response.to.have.status(200));\npm.test(\"body is array\", () => pm.expect(pm.response.json()).to.be.an(\"array\"));\n\n"
                 ]
               }
             }
