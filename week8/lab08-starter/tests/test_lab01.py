@@ -17,7 +17,8 @@ Do not depend on test execution order. Fixtures: client, app, sample_book.
 
 
 import pytest
-
+from jsonschema import validate, ValidationError
+from tools import get_book_schema
 
  
 # A trả về [] thay vì null nếu db rỗng
@@ -57,3 +58,14 @@ def test_deleted_same_book(client, sample_book):
     assert client.get(f"/books/{sample_book}").status_code == 404
  
 
+# bước 2
+def test_response_extra_field_blocked(client, sample_book):
+    book = client.get(f"/books/{sample_book}").get_json()
+
+    assert "password_hash" not in book
+
+    leaked = book.copy()
+    leaked["password_hash"] = "abc123"
+
+    assert "password_hash" in leaked
+    assert "password_hash" not in book
